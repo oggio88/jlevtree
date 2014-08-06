@@ -7,6 +7,7 @@ import java.util.List;
 /**
  * Created by walter on 04/08/14.
  */
+
 abstract class keyChecker
 {
     public abstract boolean check(char key1, char key2);
@@ -27,7 +28,7 @@ class Levtree
     LevtreeStanding standing;
     List<String> wordlist;
     DistanceCalculator calculator;
-    public enum Algorithms {LEVENSHTEIN, DAMERAU_LEVENSHTEIN};
+    public enum Algorithms {LEVENSHTEIN, DAMERAU_LEVENSHTEIN}
 
 
     Levtree(String[] words)
@@ -57,27 +58,7 @@ class Levtree
         {
             _addWord(words[i], i);
         }
-
-        calculator = new DistanceCalculator()
-        {
-            @Override
-            void compute(Levnode[] nodes, String wordkey, int[] path, int pathLength, int j)
-            {
-                int[] prow = nodes[nodes[path[j]].parent].row;
-                int[] crow = nodes[path[j]].row;
-                crow[0] = prow[0] + 1;
-                for (int k = 1; k < wordkey.length() + 1; k++)
-                {
-                    if (checker.check(nodes[path[j]].key, wordkey.charAt(k - 1)))
-                    {
-                        crow[k] = prow[k - 1];
-                    } else
-                    {
-                        crow[k] = min3(crow[k - 1] + 1, prow[k] + 1, prow[k - 1] + 1);
-                    }
-                }
-            }
-        };
+        setAlgorithm(Algorithms.LEVENSHTEIN);
     }
 
 
@@ -178,6 +159,7 @@ class Levtree
             }
         }
 
+        mainLoop:
         while(ki<size)
         {
             cnode = nodes[tnode].child;
@@ -194,11 +176,11 @@ class Levtree
                     nnode = nodes[cnode].next;
                     while(nnode != 0)
                     {
-                        if(nodes[nnode].key == keyword.charAt(ki))
+                        if (nodes[nnode].key == keyword.charAt(ki))
                         {
-                            tnode=nnode;
+                            tnode = nnode;
                             ki++;
-                            continue;
+                            continue mainLoop;
                         }
                         cnode=nnode;
                         nnode = nodes[nnode].next;
@@ -292,17 +274,7 @@ class Levtree
                 prow = nodes[nodes[path[j]].parent].row;
                 crow = nodes[path[j]].row;
                 crow[0] = prow[0] + 1;
-                for(k = 1; k < size; k++)
-                {
-                    if(checker.check(nodes[path[j]].key, wordkey.charAt(k-1)))
-                    {
-                        crow[k]=prow[k-1];
-                    }
-                    else
-                    {
-                        crow[k]=min3(crow[k-1]+1,prow[k]+1,prow[k-1]+1);
-                    }
-                }
+                calculator.compute(nodes, wordkey, path, pathIndex, j);
                 nodes[path[j]].processed = true;
             }
             if(size>1)
@@ -402,9 +374,9 @@ class Levtree
                                 crow[k] = min3(crow[k - 1] + 1, prow[k] + 1, prow[k - 1] + 1);
                             }
                             if (j < pathLength - 2 && k > 1 &&
-                                    checker.check(nodes[path[j + 1]].key, wordkey.charAt(k - 1)) &&
+                                    checker.check(nodes[path[j+1]].key, wordkey.charAt(k - 1)) &&
                                     checker.check(nodes[path[j]].key, wordkey.charAt(k - 2)) &&
-                                    checker.check(wordkey.charAt(k - 2), wordkey.charAt(k - 1))
+                                    !checker.check(wordkey.charAt(k - 2), wordkey.charAt(k - 1))
                                     )
                             {
                                 crow[k] = min(crow[k], pprow[k - 2] + 1);
@@ -412,7 +384,7 @@ class Levtree
                         }
                     }
                 };
-            };
+            }
         }
     }
 }
