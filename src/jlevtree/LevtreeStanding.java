@@ -24,26 +24,26 @@ class LevtreeStanding extends LinkedList<LevtreeResult>
         {
             for (i = 0; i < this.size(); i++)
             {
-                if (res.getDistance() < this.get(i).getDistance())
+                if (res.distance < this.get(i).distance)
                 {
                     break;
                 }
             }
             this.add(i, res);
-            highestDistance = this.getLast().getDistance();
+            highestDistance = this.getLast().distance;
         }
-        else if (res.getDistance() < highestDistance)
+        else if (res.distance < highestDistance)
         {
             for (i = 0; i < this.size(); i++)
             {
-                if (res.getDistance() < this.get(i).getDistance())
+                if (res.distance < this.get(i).distance)
                 {
                     break;
                 }
             }
             this.add(i, res);
             this.removeLast();
-            highestDistance = this.getLast().getDistance();
+            highestDistance = this.getLast().distance;
         }
     }
 }

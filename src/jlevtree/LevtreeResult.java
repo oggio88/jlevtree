@@ -6,22 +6,14 @@ package jlevtree;
 
 class LevtreeResult
 {
-    private int id;
-    private int distance;
+    public final int id;
+    public final int distance;
+    public final String word;
 
-    public LevtreeResult(int id, int distance)
+    public LevtreeResult(int id, int distance, String word)
     {
         this.id = id;
         this.distance = distance;
-    }
-
-    public int getId()
-    {
-        return id;
-    }
-
-    public int getDistance()
-    {
-        return distance;
+        this.word = word;
     }
 };
