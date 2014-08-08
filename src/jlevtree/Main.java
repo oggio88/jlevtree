@@ -53,9 +53,6 @@ class Main
             reader = Files.newBufferedReader(path, charset);
             while ((line = reader.readLine()) != null )
             {
-                //separate all csv fields into string array
-                String[] lineVariables = line.split(",");
-                //line.replace("\n", "");
                 wl.add(line);
             }
         }
@@ -67,7 +64,7 @@ class Main
         wordlist = wl.toArray(wordlist);
         tree = new Levtree(wordlist);
         tree.setAlgorithm(Levtree.Algorithms.DAMERAU_LEVENSHTEIN);
-        for(int ind=0; ind<1; ind++)
+        for(int ind=0; ind<100; ind++)
         for(String searchKey : searches)
         {
             s = tree.search(searchKey, 6);
@@ -77,7 +74,6 @@ class Main
                 System.out.printf("id: %d\tdistance: %d\t wordkey: %s\n", res.id, res.distance, res.word);
             }
             System.out.println();
-
         }
     }
 }

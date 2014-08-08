@@ -1,6 +1,3 @@
-/**
- * Created by walter on 04/08/14.
- */
 package jlevtree;
 
 class Levnode
@@ -35,7 +32,7 @@ class Levnode
         this.prev = src.prev;
         this.child = src.child;
         this.processed = src.processed;
-        this.row = src.row;
+        this.row = null;
     }
 
     void init(char key, int index)

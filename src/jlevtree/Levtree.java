@@ -13,7 +13,7 @@ abstract class keyChecker
     public abstract boolean check(char key1, char key2);
 }
 
-class Levtree
+public class Levtree
 {
     int maxsize;
     boolean allocated;
@@ -31,7 +31,7 @@ class Levtree
     public enum Algorithms {LEVENSHTEIN, DAMERAU_LEVENSHTEIN}
 
 
-    Levtree(String[] words)
+    public Levtree(String[] words)
     {
         wordlist = new ArrayList<String>(Arrays.asList(words));
         nodeCount = 0;
@@ -59,6 +59,31 @@ class Levtree
             _addWord(words[i], i);
         }
         setAlgorithm(Algorithms.LEVENSHTEIN);
+    }
+
+    public Levtree(Levtree src)
+    {
+        this.standing = null;
+        this.entryCount = src.entryCount;
+        this.allocated = false;
+        this.torealloc = false;
+        this.nodeSize = src.nodeSize;
+        this.nodeCount = src.nodeCount;
+        this.maxsize = src.maxsize;
+        this.wordlist = new ArrayList<String>(src.wordlist);
+        this.entrySize = src.entrySize;
+        this.nodes = new Levnode[src.nodes.length];
+        for(int i=0; i<src.nodeCount; i++)
+        {
+            nodes[i] = new Levnode(src.nodes[i]);
+        }
+        this.entries = new int[src.entryCount];
+        for(int i=0; i<src.entryCount; i++)
+        {
+            entries[i] = src.entries[i];
+        }
+        this.checker = src.checker;
+        this.calculator = src.calculator;
     }
 
 
@@ -217,7 +242,7 @@ class Levtree
         }
     }
 
-    LevtreeStanding search(String wordkey, int n_of_matches)
+    public LevtreeStanding search(String wordkey, int n_of_matches)
     {
         if(!allocated)
         {

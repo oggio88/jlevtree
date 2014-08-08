@@ -4,7 +4,7 @@ package jlevtree;
  * Created by walter on 04/08/14.
  */
 
-class LevtreeResult
+public class LevtreeResult
 {
     public final int id;
     public final int distance;

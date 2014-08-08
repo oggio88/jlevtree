@@ -6,7 +6,7 @@ package jlevtree;
 
 import java.util.LinkedList;
 
-class LevtreeStanding extends LinkedList<LevtreeResult>
+public class LevtreeStanding extends LinkedList<LevtreeResult>
 {
     private int maxSize;
     private int highestDistance;
