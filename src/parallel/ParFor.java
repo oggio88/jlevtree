@@ -1,7 +1,5 @@
 package parallel;
 
-import java.util.Objects;
-
 /**
  * Created by walter on 07/08/14.
  */
@@ -9,8 +7,8 @@ import java.util.Objects;
 public abstract class ParFor<T> implements Runnable
 {
     private static final int cores = Runtime.getRuntime().availableProcessors();
-    private Thread[] threads;
-    private Integer index;
+    private volatile int index;
+    private final Object syncObject = new Object();
     private T[] arguments;
     private Object[] results;
 
@@ -19,7 +17,7 @@ public abstract class ParFor<T> implements Runnable
         results = new Object[arguments.length];
         this.arguments = arguments;
         index=0;
-        threads = new Thread[cores];
+        Thread[] threads = new Thread[cores];
         for(int i=0; i<threads.length; i++)
         {
             threads[i] = new Thread(this);
@@ -40,7 +38,7 @@ public abstract class ParFor<T> implements Runnable
 
     int getNextArgument()
     {
-        synchronized(index)
+        synchronized(syncObject)
         {
             if (index<arguments.length)
             {

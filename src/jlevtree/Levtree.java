@@ -78,10 +78,7 @@ public class Levtree
             nodes[i] = new Levnode(src.nodes[i]);
         }
         this.entries = new int[src.entryCount];
-        for(int i=0; i<src.entryCount; i++)
-        {
-            entries[i] = src.entries[i];
-        }
+        System.arraycopy(src.entries, 0, entries, 0, src.entryCount);
         this.checker = src.checker;
         this.calculator = src.calculator;
     }
@@ -257,7 +254,7 @@ public class Levtree
         }
 
         standing = new LevtreeStanding(n_of_matches);
-        int i, j, k, pathIndex;
+        int i, j, pathIndex;
         int size;
         size = wordkey.length()+1;
         int[] path = new int[maxsize+2];
@@ -272,7 +269,6 @@ public class Levtree
             nodes[0].row[i]=i;
         }
 
-        int[] crow = null, prow;
         int ptr,ref;
 
         for(i=0;i<entryCount;i++)
@@ -296,15 +292,12 @@ public class Levtree
                 {
                     continue;
                 }
-                prow = nodes[nodes[path[j]].parent].row;
-                crow = nodes[path[j]].row;
-                crow[0] = prow[0] + 1;
                 calculator.compute(nodes, wordkey, path, pathIndex, j);
                 nodes[path[j]].processed = true;
             }
             if(size>1)
             {
-                standing.newEntry(new LevtreeResult(nodes[ref].id, crow[size - 1], wordlist.get(nodes[ref].id)));
+                standing.newEntry(new LevtreeResult(nodes[ref].id, nodes[path[1]].row[size - 1], wordlist.get(nodes[ref].id)));
             }
         }
 

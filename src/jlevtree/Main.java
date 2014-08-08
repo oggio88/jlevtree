@@ -64,7 +64,7 @@ class Main
         wordlist = wl.toArray(wordlist);
         tree = new Levtree(wordlist);
         tree.setAlgorithm(Levtree.Algorithms.DAMERAU_LEVENSHTEIN);
-        for(int ind=0; ind<100; ind++)
+        for(int ind=0; ind<10; ind++)
         for(String searchKey : searches)
         {
             s = tree.search(searchKey, 6);
