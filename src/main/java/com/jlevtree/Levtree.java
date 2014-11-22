@@ -5,20 +5,16 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Created by walter on 04/08/14.
+ * Class implementing a tree structure for effficient Levenshtein distance calculation
+ * @author Walter Oggioni
  */
-
-abstract class keyChecker
-{
-    public abstract boolean check(char key1, char key2);
-}
 
 public class Levtree
 {
     int maxsize;
     boolean allocated;
     boolean torealloc;
-    keyChecker checker;
+    KeyChecker checker;
     Levnode[] nodes;
     int nodeCount;
     int nodeSize;
@@ -28,9 +24,27 @@ public class Levtree
     LevtreeStanding standing;
     List<String> wordlist;
     DistanceCalculator calculator;
-    public enum Algorithms {LEVENSHTEIN, DAMERAU_LEVENSHTEIN}
+
+    /**
+     * Supported string-distance calculation algorithm
+     */
+    public enum Algorithms
+    {
+        /**
+         * Plain Levenshtein distance
+         */
+        LEVENSHTEIN,
+        /**
+         * Damerau-Levenshtein distance
+         */
+        DAMERAU_LEVENSHTEIN
+    }
 
 
+    /**
+     *
+     * @param words A list of strings to be inserted into the tree
+     */
     public Levtree(String[] words)
     {
         wordlist = new ArrayList<String>(Arrays.asList(words));
@@ -45,7 +59,7 @@ public class Levtree
         entries = new int[words.length];
         nodes[0] = new Levnode('\0',0);
         nodeCount++;
-        checker = new keyChecker()
+        checker = new KeyChecker()
         {
             @Override
             public boolean check(char key1, char key2)
@@ -61,6 +75,10 @@ public class Levtree
         setAlgorithm(Algorithms.LEVENSHTEIN);
     }
 
+    /**
+     *
+     * @param src Another instance of the Levtree class that will be as source for a deep copy
+     */
     public Levtree(Levtree src)
     {
         this.standing = null;
@@ -121,7 +139,7 @@ public class Levtree
         }
     }
 
-    LevtreeResult getResult(int pos)
+    private LevtreeResult getResult(int pos)
     {
         pos = standing.size()-pos-1;
         return standing.get(pos);
@@ -159,6 +177,10 @@ public class Levtree
         }
     }
 
+    /**Add a single word to the tree
+     *
+     * @param word A string containing the word to be added
+     */
     public void addWord(String word)
     {
         _addWord(word, wordlist.size());
@@ -239,6 +261,12 @@ public class Levtree
         }
     }
 
+    /**
+     * Search a word into the tree returning a list of strings ordered by distance in ascending order
+     * @param wordkey A string containing the word that will be searched
+     * @param n_of_matches The length of the list of result that will be returned
+     * @return A list of strings containing the nearest matches ordered by distance in ascending order
+     */
     public LevtreeStanding search(String wordkey, int n_of_matches)
     {
         if(!allocated)
@@ -317,11 +345,15 @@ public class Levtree
         return standing;
     }
 
+    /**
+     * Set whether subsequent searches in the tree will be case-sensitive
+     * @param isCaseSensitive Set to true to toggle case-sensitive searches, false otherwise
+     */
     public void setCaseSensitive(boolean isCaseSensitive)
     {
         if(isCaseSensitive)
         {
-            checker = new keyChecker()
+            checker = new KeyChecker()
             {
                 @Override
                 public boolean check(char key1, char key2)
@@ -332,7 +364,7 @@ public class Levtree
         }
         else
         {
-            checker = new keyChecker()
+            checker = new KeyChecker()
             {
                 @Override
                 public boolean check(char key1, char key2)
@@ -343,6 +375,11 @@ public class Levtree
         }
     }
 
+    /**
+     * Set the algorithm used for string-distance calculation
+     * @param algo An enum specifying the algorithm that will be used for string-distance calculation
+     * @see com.jlevtree.Levtree.Algorithms
+     */
     public void setAlgorithm(Algorithms algo)
     {
         switch (algo)

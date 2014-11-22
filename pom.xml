@@ -86,7 +86,37 @@
                     </descriptorRefs>
                 </configuration>
             </plugin>
+
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-javadoc-plugin</artifactId>
+              <version>2.10.1</version>
+              <configuration>
+                <show>private</show>
+                <nohelp>true</nohelp>
+              </configuration>
+            </plugin>
         </plugins>
     </build>
+
+ <distributionManagement>
+    <site>
+      <id>website</id>
+      <url>https://oggio88.linuxd.org/cgit/jlevtree/</url>
+    </site>
+  </distributionManagement>
+<reporting>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>2.10.1</version>
+        <configuration>
+          <show>public</show>
+        </configuration>
+      </plugin>
+    </plugins>
+</reporting>
+
 
 </project>
