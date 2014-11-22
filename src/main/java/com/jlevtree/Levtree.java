@@ -1,4 +1,4 @@
-package jlevtree;
+package com.jlevtree;
 
 import java.util.ArrayList;
 import java.util.Arrays;

@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" build-on-make="true" name="jlevtree:jar">
-    <output-path>$PROJECT_DIR$/out/artifacts/jlevtree_jar</output-path>
-    <root id="archive" name="jlevtree.jar">
-      <element id="module-output" name="jlevtree" />
-    </root>
-  </artifact>
-</component>

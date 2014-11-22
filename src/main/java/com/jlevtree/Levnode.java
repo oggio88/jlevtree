@@ -1,4 +1,4 @@
-package jlevtree;
+package com.jlevtree;
 
 class Levnode
 {

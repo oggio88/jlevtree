@@ -1,4 +1,4 @@
-package jlevtree;
+package com.jlevtree;
 
 /**
  * Created by walter on 06/08/14.
