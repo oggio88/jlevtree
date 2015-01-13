@@ -175,6 +175,7 @@ public class Levtree
         {
             nodes[prev].next = nodeCount-1;
         }
+        node.row = new int[maxsize];
     }
 
     /**Add a single word to the tree
@@ -248,6 +249,7 @@ public class Levtree
                 System.arraycopy(entries, 0, newEntries, 0, entries.length);
                 entries = newEntries;
             }
+            //torealloc = true;
         }
     }
 

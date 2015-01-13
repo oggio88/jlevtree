@@ -18,16 +18,11 @@ import java.util.List;
 
 public class TestClass
 {
-    @Test
-    public void performanceTest()
+
+    private Levtree treeInit()
     {
-        //String[] wordlist = {"csoa", "ciao", "ocsa", "coniglio", "casa", "cane", "scuola"};
         String[] wordlist;
-        String[] searches = {"camle", "coriolis", "mattel", "cruzer", "cpoper"};
         Levtree tree;
-        LevtreeStanding s;
-
-
         String filePath = "/usr/share/dict/";
         Path path = Paths.get(filePath, "cracklib-small"); //or any text file eg.: txt, bat, etc
         Charset charset = Charset.forName("UTF-8");
@@ -42,8 +37,7 @@ public class TestClass
             {
                 wl.add(line);
             }
-        }
-        catch (IOException e)
+        } catch (IOException e)
         {
             System.err.println(e);
         }
@@ -51,6 +45,20 @@ public class TestClass
         wordlist = wl.toArray(wordlist);
         tree = new Levtree(wordlist);
         tree.setAlgorithm(Levtree.Algorithms.DAMERAU_LEVENSHTEIN);
+        return tree;
+    }
+
+
+    @Test
+    public void performanceTest()
+    {
+        System.out.println("++++++++++ Running performanceTest() ++++++++++++");
+        //String[] wordlist = {"csoa", "ciao", "ocsa", "coniglio", "casa", "cane", "scuola"};
+        String[] wordlist;
+        String[] searches = {"camle", "coriolis", "mattel", "cruzer", "cpoper"};
+        Levtree tree = treeInit();
+        LevtreeStanding s;
+
         for (int ind = 0; ind < 10; ind++)
         {
             for (String searchKey : searches)
@@ -64,5 +72,50 @@ public class TestClass
                 System.out.println();
             }
         }
+        System.out.println("++++++++++ End performanceTest() ++++++++++++");
+    }
+
+    @Test
+    public void addTest()
+    {
+        System.out.println("++++++++++ Running addTest() ++++++++++++");
+        Levtree tree = treeInit();
+        tree.addWord("pluto");
+        String[] searches = {"camle", "coriolis", "mattel", "cruzer", "cpoper"};
+        LevtreeStanding s;
+        for (String searchKey : searches)
+        {
+            s = tree.search(searchKey, 5);
+
+            for (LevtreeResult res : s)
+            {
+                System.out.printf("id: %d\tdistance: %d\t wordkey: %s\n", res.id, res.distance, res.word);
+            }
+            System.out.println();
+        }
+
+        tree.addWord("pippo");
+        for (String searchKey : searches)
+        {
+            s = tree.search(searchKey, 5);
+
+            for (LevtreeResult res : s)
+            {
+                System.out.printf("id: %d\tdistance: %d\t wordkey: %s\n", res.id, res.distance, res.word);
+            }
+            System.out.println();
+        }
+
+        tree.addWord("qwertyuiopasdfghjklzxcvbnm");
+
+        s = tree.search("qwertyuiopassdfghjklzxcvbnm", 5);
+
+        for (LevtreeResult res : s)
+        {
+            System.out.printf("id: %d\tdistance: %d\t wordkey: %s\n", res.id, res.distance, res.word);
+        }
+        System.out.println();
+
+        System.out.println("++++++++++ End addTest() ++++++++++++");
     }
 }
