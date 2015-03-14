@@ -1,11 +1,10 @@
 package com.jlevtree;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +14,7 @@ import java.util.List;
 
 class Main
 {
-    public static void main(String[] args)
+    public static void main(String[] args) throws Exception
     {
         //String[] wordlist = {"csoa", "ciao", "ocsa", "coniglio", "casa", "cane", "scuola"};
         String[] wordlist;
@@ -24,21 +23,27 @@ class Main
         LevtreeStanding s;
 
 
-        String filePath = "/usr/share/dict/";
-        Path path = Paths.get(filePath, "cracklib-small"); //or any text file eg.: txt, bat, etc
+        String filePath = "/usr/share/dict/cracklib-small";
+        FileInputStream fis = new FileInputStream(filePath);
         Charset charset = Charset.forName("UTF-8");
         String line;
         BufferedReader reader;
 
         List<String> wl = new ArrayList<String>();
-        try {
-            reader = Files.newBufferedReader(path, charset);
-            while ((line = reader.readLine()) != null) {
+        try
+        {
+            reader = new BufferedReader(new InputStreamReader(fis, charset));
+            while ((line = reader.readLine()) != null)
+            {
                 wl.add(line);
             }
-        } catch (IOException e) {
+        }
+        catch (IOException e)
+        {
             System.err.println(e);
         }
+        FileInputStream is = new FileInputStream(filePath);
+        is.read();
         wordlist = new String[wl.size()];
         wordlist = wl.toArray(wordlist);
         tree = new Levtree(wordlist);
