@@ -18,9 +18,9 @@ class Main
     {
         //String[] wordlist = {"csoa", "ciao", "ocsa", "coniglio", "casa", "cane", "scuola"};
         String[] wordlist;
-        String[] searches = {"camle", "coriolis", "mattel", "cruzer", "cpoper"};
+        String[] searches = {"camel", "coriolis", "mattel", "cruzer", "cpoper", "roublesoot"};
         Levtree tree;
-        LevtreeStanding s;
+        LevtreeStanding s = null;
 
 
         String filePath = "/usr/share/dict/cracklib-small";
@@ -48,15 +48,21 @@ class Main
         wordlist = wl.toArray(wordlist);
         tree = new Levtree(wordlist);
         tree.setAlgorithm(Levtree.Algorithms.DAMERAU_LEVENSHTEIN);
-        for (int ind = 0; ind < 10; ind++) {
-            for (String searchKey : searches) {
+        for (int ind = 0; ind < 50; ind++)
+        {
+            for (String searchKey : searches)
+            {
                 s = tree.search(searchKey, 6);
-
-                for (LevtreeResult res : s) {
-                    System.out.printf("id: %d\tdistance: %d\t wordkey: %s\n", res.id, res.distance, res.word);
-                }
-                System.out.println();
             }
+        }
+        for (String searchKey : searches)
+        {
+            s = tree.search(searchKey, 6);
+            for (LevtreeResult res : s)
+            {
+                System.out.printf("id: %d\tdistance: %d\t wordkey: %s\n", res.id, res.distance, res.word);
+            }
+            System.out.println();
         }
     }
 }
