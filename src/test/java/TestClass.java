@@ -55,22 +55,29 @@ public class TestClass
         System.out.println("++++++++++ Running performanceTest() ++++++++++++");
         //String[] wordlist = {"csoa", "ciao", "ocsa", "coniglio", "casa", "cane", "scuola"};
         String[] wordlist;
-        String[] searches = {"camle", "coriolis", "mattel", "cruzer", "cpoper"};
+        String[] searches = {"camel", "coriolis", "mattel", "cruzer", "cpoper", "roublesoot"};
         Levtree tree = treeInit();
         LevtreeStanding s;
+        tree.setAlgorithm(Levtree.Algorithms.DAMERAU_LEVENSHTEIN);
+        tree.setCaseSensitive(false);
 
-        for (int ind = 0; ind < 10; ind++)
+        for (int ind = 0; ind < 50; ind++)
         {
             for (String searchKey : searches)
             {
-                s = tree.search(searchKey, 5);
-
-                for (LevtreeResult res : s)
-                {
-                    System.out.printf("id: %d\tdistance: %d\t wordkey: %s\n", res.id, res.distance, res.word);
-                }
-                System.out.println();
+                s = tree.search(searchKey, 6);
             }
+        }
+        
+	for (String searchKey : searches)
+        {
+       	    s = tree.search(searchKey, 6);
+
+            for (LevtreeResult res : s)
+            {
+                System.out.printf("id: %d\tdistance: %d\t wordkey: %s\n", res.id, res.distance, res.word);
+            }
+            System.out.println();
         }
         System.out.println("++++++++++ End performanceTest() ++++++++++++");
     }
