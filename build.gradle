@@ -2,7 +2,7 @@ apply plugin: 'java'
 apply plugin: 'maven'
 apply plugin: 'maven-publish'
 
-group='org.oggio88'
+group='com.oggio88'
 version='1.0'
 sourceCompatibility=1.8
 logging.captureStandardOutput LogLevel.INFO
@@ -21,5 +21,17 @@ dependencies
 
 test {
     testLogging.showStandardStreams = true
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId project.group
+            artifactId project.name
+            version project.version
+
+            from components.java
+        }
+    }
 }
 
