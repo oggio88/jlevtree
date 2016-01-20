@@ -1,63 +1,63 @@
-package com.jlevtree;
+	package com.jlevtree;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+	import java.util.ArrayList;
+	import java.util.Arrays;
+	import java.util.List;
 
-/**
- * Class implementing a tree structure for effficient Levenshtein distance calculation
- * @author Walter Oggioni
- */
+	/**
+	 * Class implementing a tree structure for effficient Levenshtein distance calculation
+	 * @author Walter Oggioni
+	 */
 
-public class Levtree
-{
-    int maxsize;
-    boolean allocated;
-    boolean torealloc;
-    KeyChecker checker;
-    Levnode[] nodes;
-    int nodeCount;
-    int nodeSize;
-    int[] entries; //vettore di interi che contiene la posizione di ogni parola nel vettore dei nodi
-    int entryCount;
-    int entrySize;
-    LevtreeStanding standing;
-    List<String> wordlist;
-    DistanceCalculator calculator;
+	public class Levtree
+	{
+	    int maxsize;
+	    boolean allocated;
+	    boolean torealloc;
+	    KeyChecker checker;
+	    Levnode[] nodes;
+	    int nodeCount;
+	    int nodeSize;
+	    int[] entries; //vettore di interi che contiene la posizione di ogni parola nel vettore dei nodi
+	    int entryCount;
+	    int entrySize;
+	    LevtreeStanding standing;
+	    List<String> wordlist;
+	    DistanceCalculator calculator;
 
-    /**
-     * Supported string-distance calculation algorithm
-     */
-    public enum Algorithms
-    {
-        /**
-         * Plain Levenshtein distance
-         */
-        LEVENSHTEIN,
-        /**
-         * Damerau-Levenshtein distance
-         */
-        DAMERAU_LEVENSHTEIN
-    }
+	    /**
+	     * Supported string-distance calculation algorithm
+	     */
+	    public enum Algorithms
+	    {
+		/**
+		 * Plain Levenshtein distance
+		 */
+		LEVENSHTEIN,
+		/**
+		 * Damerau-Levenshtein distance
+		 */
+		DAMERAU_LEVENSHTEIN
+	    }
 
 
-    /**
-     *
-     * @param words A list of strings to be inserted into the tree
-     */
-    public Levtree(String[] words)
-    {
-        wordlist = new ArrayList<String>(Arrays.asList(words));
-        nodeCount = 0;
-        nodeSize = words.length*2;
-        nodes = new Levnode[nodeSize];
-        allocated = false;
-        torealloc = false;
-        entryCount = 0;
-        maxsize = 0;
-        entrySize = words.length;
-        entries = new int[words.length];
-        nodes[0] = new Levnode('\0',0);
+	    /**
+	     *
+	     * @param words A list of strings to be inserted into the tree
+	     */
+	    public Levtree(String[] words)
+	    {
+		wordlist = new ArrayList<String>(Arrays.asList(words));
+		nodeCount = 0;
+		nodeSize = words.length > 0 ? words.length * 2 : 1;
+		nodes = new Levnode[nodeSize];
+		allocated = false;
+		torealloc = false;
+		entryCount = 0;
+		maxsize = 0;
+		entrySize = words.length;
+		entries = new int[words.length];
+		nodes[0] = new Levnode('\0',0);
         nodeCount++;
         checker = new KeyChecker()
         {
