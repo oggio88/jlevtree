@@ -1,0 +1,22 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+
+sourceCompatibility=1.8
+logging.captureStandardOutput LogLevel.INFO
+
+repositories 
+{
+	mavenLocal()
+	mavenCentral()
+}
+
+dependencies
+{
+	testCompile 'junit:junit:4.11'
+}
+
+
+test {
+    testLogging.showStandardStreams = true
+}
+

@@ -86,7 +86,7 @@ public class TestClass
     public void addTest()
     {
         System.out.println("++++++++++ Running addTest() ++++++++++++");
-        Levtree tree = treeInit();
+        Levtree tree =  treeInit();
         tree.addWord("pluto");
         String[] searches = {"camle", "coriolis", "mattel", "cruzer", "cpoper"};
         LevtreeStanding s;
