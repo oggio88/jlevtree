@@ -47,7 +47,7 @@ public class Levtree
      */
     public Levtree(String[] words)
     {
-        wordlist = new ArrayList<String>(Arrays.asList(words));
+        wordlist = new ArrayList<>(Arrays.asList(words));
         nodeCount = 0;
         entrySize = words.length > 0 ? words.length : 1;
         nodeSize = entrySize* 2;
@@ -323,7 +323,7 @@ public class Levtree
                 {
                     continue;
                 }
-                calculator.compute(nodes, wordkey, path, pathIndex, j);
+                calculator.compute(wordkey, path, pathIndex, j);
                 nodes[path[j]].processed = true;
             }
             if (size > 1)
@@ -394,7 +394,7 @@ public class Levtree
                 calculator = new DistanceCalculator()
                 {
                     @Override
-                    void compute(Levnode[] nodes, String wordkey, int[] path, int pathLength, int j)
+                    void compute(String wordkey, int[] path, int pathLength, int j)
                     {
                         int[] prow = nodes[nodes[path[j]].parent].row;
                         int[] crow = nodes[path[j]].row;
@@ -419,7 +419,7 @@ public class Levtree
                 calculator = new DistanceCalculator()
                 {
                     @Override
-                    void compute(Levnode[] nodes, String wordkey, int[] path, int pathLength, int j)
+                    void compute(String wordkey, int[] path, int pathLength, int j)
                     {
                         int[] prow = nodes[nodes[path[j]].parent].row;
                         int[] crow = nodes[path[j]].row;

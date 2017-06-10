@@ -5,5 +5,5 @@ package com.jlevtree;
  */
 abstract class DistanceCalculator
 {
-    abstract void compute(Levnode[] nodes, String wordkey, int[] path, int pathLength, int j);
+    abstract void compute(String wordkey, int[] path, int pathLength, int j);
 }
