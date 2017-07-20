@@ -15,5 +15,6 @@ libraryDependencies += "com.novocode" % "junit-interface" % "0.11" % "test"
 libraryDependencies += "org.tukaani" % "xz" % "1.6" % "test"
 libraryDependencies += "com.fasterxml.jackson.core" % "jackson-core" % "2.9.0.pr3"
 
+crossPaths := false
 
 enablePlugins(JavaAppPackaging)
