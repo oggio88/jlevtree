@@ -1,3 +1,5 @@
+package com.jlevtree.test;
+
 import com.jlevtree.Levtree;
 import com.jlevtree.LevtreeResult;
 import com.jlevtree.LevtreeStanding;
@@ -11,13 +13,15 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * Created by walter on 22/11/14.
  */
 
-public class TestClass
+public class TestClass extends AbstractTest
 {
+    private Logger log = Logger.getLogger(getClass().getName());
 
     private Levtree treeInit()
     {
@@ -37,7 +41,8 @@ public class TestClass
             {
                 wl.add(line);
             }
-        } catch (IOException e)
+        }
+        catch (IOException e)
         {
             System.err.println(e);
         }
@@ -54,7 +59,6 @@ public class TestClass
     {
         System.out.println("++++++++++ Running performanceTest() ++++++++++++");
         //String[] wordlist = {"csoa", "ciao", "ocsa", "coniglio", "casa", "cane", "scuola"};
-        String[] wordlist;
         String[] searches = {"camel", "coriolis", "mattel", "cruzer", "cpoper", "roublesoot"};
         Levtree tree = treeInit();
         LevtreeStanding s;
@@ -68,10 +72,10 @@ public class TestClass
                 s = tree.search(searchKey, 6);
             }
         }
-        
-	for (String searchKey : searches)
+
+        for (String searchKey : searches)
         {
-       	    s = tree.search(searchKey, 6);
+            s = tree.search(searchKey, 6);
 
             for (LevtreeResult res : s)
             {
@@ -86,7 +90,7 @@ public class TestClass
     public void addTest()
     {
         System.out.println("++++++++++ Running addTest() ++++++++++++");
-        Levtree tree =  treeInit();
+        Levtree tree = treeInit();
         tree.addWord("pluto");
         String[] searches = {"camle", "coriolis", "mattel", "cruzer", "cpoper"};
         LevtreeStanding s;
@@ -124,5 +128,11 @@ public class TestClass
         System.out.println();
 
         System.out.println("++++++++++ End addTest() ++++++++++++");
+    }
+
+    @Override
+    protected Logger getLogger()
+    {
+        return log;
     }
 }
