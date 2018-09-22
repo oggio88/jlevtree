@@ -29,7 +29,7 @@ lazy val levtreeTestUtils = (project in file("test")).settings(
     libraryDependencies += "com.novocode" % "junit-interface" % "0.11" % Test,
     libraryDependencies += "com.fasterxml.jackson.core" % "jackson-databind" % "2.9.6" % Test,
     artifactName := artifactNameGenerator(),
-    publishArtifact := false
+    skip in publish := true
 ).dependsOn(LocalRootProject)
 
 lazy val levtreeBenchmark = (project in file("benchmark")).settings(
@@ -41,5 +41,5 @@ lazy val levtreeBenchmark = (project in file("benchmark")).settings(
     mappings in packageBin in Compile ++= (mappings in (levtreeTestUtils, Compile, packageBin)).value,
     resourceDirectory := (resourceDirectory in (LocalRootProject, Test)).value,
     artifactName := artifactNameGenerator(),
-    publishArtifact := false
+    skip in publish := true
 ).dependsOn(LocalRootProject).dependsOn(levtreeTestUtils)
