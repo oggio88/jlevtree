@@ -9,6 +9,7 @@ organization := "org.oggio88"
 version := "1.0"
 
 resolvers += Resolver.mavenLocal
+crossPaths := false
 
 def artifactNameGenerator(test : Boolean = false) =
     (sv: ScalaVersion, module: ModuleID, artifact: Artifact) => {
