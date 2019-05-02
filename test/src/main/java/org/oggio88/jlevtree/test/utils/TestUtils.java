@@ -11,7 +11,8 @@ import java.util.List;
 
 public class TestUtils {
 
-    private TestUtils(){}
+    private TestUtils() {
+    }
 
     static public Levtree treeInit() {
         String[] wordlist;
@@ -23,11 +24,11 @@ public class TestUtils {
         List<String> wl = new ArrayList<String>();
         try {
             reader = new BufferedReader(new InputStreamReader(
-                    TestUtils.class.getResourceAsStream("/cracklib-small"), charset));
-            while ((line = reader.readLine()) != null) {
+                TestUtils.class.getResourceAsStream("/cracklib-small"), charset));
+            while((line = reader.readLine()) != null) {
                 wl.add(line);
             }
-        } catch (IOException e) {
+        } catch(IOException e) {
             System.err.println(e);
         }
         wordlist = new String[wl.size()];

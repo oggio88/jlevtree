@@ -25,16 +25,16 @@ public class TestClass extends AbstractTest {
         tree.setAlgorithm(Levtree.Algorithms.DAMERAU_LEVENSHTEIN);
         tree.setCaseSensitive(false);
 
-        for (int ind = 0; ind < 50; ind++) {
-            for (String searchKey : searches) {
+        for(int ind = 0; ind < 50; ind++) {
+            for(String searchKey : searches) {
                 s = tree.search(searchKey, 6);
             }
         }
 
-        for (String searchKey : searches) {
+        for(String searchKey : searches) {
             s = tree.search(searchKey, 6);
 
-            for (LevtreeResult res : s) {
+            for(LevtreeResult res : s) {
                 System.out.printf("id: %d\tdistance: %d\t wordkey: %s\n", res.id, res.distance, res.word);
             }
             System.out.println();
@@ -49,20 +49,20 @@ public class TestClass extends AbstractTest {
         tree.addWord("pluto");
         String[] searches = {"camle", "coriolis", "mattel", "cruzer", "cpoper"};
         LevtreeStanding s;
-        for (String searchKey : searches) {
+        for(String searchKey : searches) {
             s = tree.search(searchKey, 5);
 
-            for (LevtreeResult res : s) {
+            for(LevtreeResult res : s) {
                 System.out.printf("id: %d\tdistance: %d\t wordkey: %s\n", res.id, res.distance, res.word);
             }
             System.out.println();
         }
 
         tree.addWord("pippo");
-        for (String searchKey : searches) {
+        for(String searchKey : searches) {
             s = tree.search(searchKey, 5);
 
-            for (LevtreeResult res : s) {
+            for(LevtreeResult res : s) {
                 System.out.printf("id: %d\tdistance: %d\t wordkey: %s\n", res.id, res.distance, res.word);
             }
             System.out.println();
@@ -72,7 +72,7 @@ public class TestClass extends AbstractTest {
 
         s = tree.search("qwertyuiopassdfghjklzxcvbnm", 5);
 
-        for (LevtreeResult res : s) {
+        for(LevtreeResult res : s) {
             System.out.printf("id: %d\tdistance: %d\t wordkey: %s\n", res.id, res.distance, res.word);
         }
         System.out.println();

@@ -5,13 +5,12 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Class implementing a tree structure for effficient Levenshtein distance calculation
+ * Class implementing a tree structure for efficient Levenshtein distance calculation
  *
  * @author Walter Oggioni
  */
 
-public class Levtree
-{
+public class Levtree {
     int maxsize;
     boolean allocated;
     boolean torealloc;
@@ -19,18 +18,16 @@ public class Levtree
     Levnode[] nodes;
     int nodeCount;
     int nodeSize;
-    int[] entries; //vettore di interi che contiene la posizione di ogni parola nel vettore dei nodi
+    int[] entries; //integer vector containing the position of every word in the node vector
     int entryCount;
     int entrySize;
-    LevtreeStanding standing;
     List<String> wordlist;
     DistanceCalculator calculator;
 
     /**
-     * Supported string-distance calculation algorithm
+     * Supported string-distance calculation algorithms
      */
-    public enum Algorithms
-    {
+    public enum Algorithms {
         /**
          * Plain Levenshtein distance
          */
@@ -45,12 +42,11 @@ public class Levtree
     /**
      * @param words A list of strings to be inserted into the tree
      */
-    public Levtree(String[] words)
-    {
+    public Levtree(String[] words) {
         wordlist = new ArrayList<>(Arrays.asList(words));
         nodeCount = 0;
         entrySize = words.length > 0 ? words.length : 1;
-        nodeSize = entrySize* 2;
+        nodeSize = entrySize * 2;
         nodes = new Levnode[nodeSize];
         allocated = false;
         torealloc = false;
@@ -59,18 +55,9 @@ public class Levtree
         entries = new int[entrySize];
         nodes[0] = new Levnode('\0', 0);
         nodeCount++;
-        checker = new KeyChecker()
-        {
-            @Override
-            public boolean check(char key1, char key2)
-            {
-                return key1 == key2;
-            }
-        };
-        int i;
-        for (i = 0; i < words.length; i++)
-        {
-            _addWord(words[i], i);
+        checker = (char key1, char key2) -> key1 == key2;
+        for(int i = 0; i < words.length; i++) {
+            addWord(words[i], i);
         }
         setAlgorithm(Algorithms.LEVENSHTEIN);
     }
@@ -78,20 +65,17 @@ public class Levtree
     /**
      * @param src Another instance of the Levtree class that will be as source for a deep copy
      */
-    public Levtree(Levtree src)
-    {
-        this.standing = null;
+    public Levtree(Levtree src) {
         this.entryCount = src.entryCount;
         this.allocated = false;
         this.torealloc = false;
         this.nodeSize = src.nodeSize;
         this.nodeCount = src.nodeCount;
         this.maxsize = src.maxsize;
-        this.wordlist = new ArrayList<String>(src.wordlist);
+        this.wordlist = new ArrayList<>(src.wordlist);
         this.entrySize = src.entrySize;
         this.nodes = new Levnode[src.nodes.length];
-        for (int i = 0; i < src.nodeCount; i++)
-        {
+        for(int i = 0; i < src.nodeCount; i++) {
             nodes[i] = new Levnode(src.nodes[i]);
         }
         this.entries = new int[src.entryCount];
@@ -101,77 +85,52 @@ public class Levtree
     }
 
 
-    private static int min(int x, int y)
-    {
+    private static int min(int x, int y) {
         return ((x) < (y) ? (x) : (y));
     }
 
-    private static int min3(int a, int b, int c)
-    {
+    private static int min3(int a, int b, int c) {
         return ((a) < (b) ? min((a), (c)) : min((b), (c)));
     }
 
-    void allocRows(int newsize)
-    {
-        int i;
-        for (i = 0; i < nodeCount; i++)
-        {
+    void allocRows(int newsize) {
+        for(int i = 0; i < nodeCount; i++) {
             nodes[i].row = new int[newsize];
         }
     }
 
-    void reallocRows(int newsize)
-    {
-        int i;
-        for (i = 0; i < nodeCount; i++)
-        {
-            if (nodes[i].row != null)
-            {
+    void reallocRows(int newsize) {
+        for(int i = 0; i < nodeCount; i++) {
+            if(nodes[i].row != null) {
                 int[] newRow = new int[newsize];
                 System.arraycopy(nodes[i].row, 0, newRow, 0, nodes[i].row.length);
                 nodes[i].row = newRow;
-            }
-            else
-            {
+            } else {
                 nodes[i].row = new int[newsize];
             }
         }
     }
 
-    private LevtreeResult getResult(int pos)
-    {
-        pos = standing.size() - pos - 1;
-        return standing.get(pos);
-    }
-
-    private void addNode(char key, int index, int parent, int prev)
-    {
+    private void addNode(char key, int index, int parent, int prev) {
         nodeCount++;
-        if (nodeCount >= nodeSize)
-        {
+        if(nodeCount >= nodeSize) {
             nodeSize *= 2;
             Levnode[] newNodes = new Levnode[nodeSize];
             System.arraycopy(nodes, 0, newNodes, 0, nodes.length);
             nodes = newNodes;
         }
 
-        if (key != '\0')
-        {
+        if(key != '\0') {
             nodes[nodeCount - 1] = new Levnode(key, 0);
-        }
-        else
-        {
+        } else {
             nodes[nodeCount - 1] = new Levnode(key, index);
         }
         Levnode node = nodes[nodeCount - 1];
         node.parent = parent;
         node.prev = prev;
-        if (prev == 0)
-        {
+        if(prev == 0) {
             nodes[parent].child = nodeCount - 1;
-        }
-        else
-        {
+        } else {
             nodes[prev].next = nodeCount - 1;
         }
         node.row = new int[maxsize];
@@ -182,47 +141,36 @@ public class Levtree
      *
      * @param word A string containing the word to be added
      */
-    public void addWord(String word)
-    {
-        _addWord(word, wordlist.size());
+    public void addWord(String word) {
+        addWord(word, wordlist.size());
     }
 
-    private void _addWord(String word, int id)
-    {
+    private void addWord(String word, int id) {
         String keyword = word + '\0';
         int size;
         int initial_nodes = nodeCount;
         int ki = 0;
         int tnode = 0, cnode, nnode;
         size = keyword.length();
-        if (size > maxsize)
-        {
+        if(size > maxsize) {
             maxsize = size;
-            if (allocated)
-            {
+            if(allocated) {
                 torealloc = true;
             }
         }
 
         mainLoop:
-        while (ki < size)
-        {
+        while(ki < size) {
             cnode = nodes[tnode].child;
-            if (cnode != 0)
-            {
-                if (nodes[cnode].key == keyword.charAt(ki))
-                {
+            if(cnode != 0) {
+                if(nodes[cnode].key == keyword.charAt(ki)) {
                     tnode = cnode;
                     ki++;
                     continue;
-                }
-                else
-                {
+                } else {
                     nnode = nodes[cnode].next;
-                    while (nnode != 0)
-                    {
-                        if (nodes[nnode].key == keyword.charAt(ki))
-                        {
+                    while(nnode != 0) {
+                        if(nodes[nnode].key == keyword.charAt(ki)) {
                             tnode = nnode;
                             ki++;
                             continue mainLoop;
@@ -237,29 +185,17 @@ public class Levtree
             ki++;
             tnode = nodeCount - 1;
         }
-        if (nodeCount > initial_nodes)
-        {
+        if(nodeCount > initial_nodes) {
             wordlist.add(id, word);
             entryCount++;
             entries[entryCount - 1] = nodeCount - 1;
-            if (entryCount >= entrySize)
-            {
+            if(entryCount >= entrySize) {
                 entrySize *= 2;
                 int[] newEntries = new int[entrySize];
                 System.arraycopy(entries, 0, newEntries, 0, entries.length);
                 entries = newEntries;
             }
             //torealloc = true;
-        }
-    }
-
-    void lprint()
-    {
-        System.out.print("----------STANDING----------\n");
-        int i;
-        for (i = standing.size() - 1; i >= 0; i--)
-        {
-            System.out.printf("node: %d, distance: %d\n", standing.get(i).id, standing.get(i).distance);
         }
     }
 
@@ -270,45 +206,38 @@ public class Levtree
      * @param n_of_matches The length of the list of result that will be returned
      * @return A list of strings containing the nearest matches ordered by distance in ascending order
      */
-    public LevtreeStanding search(String wordkey, int n_of_matches)
-    {
-        if (!allocated)
-        {
+    public LevtreeStanding search(String wordkey, int n_of_matches) {
+        if(!allocated) {
             allocRows(maxsize);
             allocated = true;
         }
 
-        if (torealloc)
-        {
+        if(torealloc) {
             reallocRows(maxsize);
             torealloc = false;
         }
 
-        standing = new LevtreeStanding(n_of_matches);
+        LevtreeStanding standing = new LevtreeStanding(n_of_matches);
         int i, j, pathIndex;
         int size;
         size = wordkey.length() + 1;
         int[] path = new int[maxsize + 2];
-        if (size > maxsize)
-        {
+        if(size > maxsize) {
             reallocRows(size);
             maxsize = size;
         }
         nodes[0].processed = true;
-        for (i = 0; i < size; i++)
-        {
+        for(i = 0; i < size; i++) {
             nodes[0].row[i] = i;
         }
 
         int ptr, ref;
 
-        for (i = 0; i < entryCount; i++)
-        {
+        for(i = 0; i < entryCount; i++) {
             ref = entries[i];
             ptr = ref;
             pathIndex = 0;
-            while (ptr > 0)
-            {
+            while(ptr > 0) {
                 path[pathIndex++] = ptr;
                 ptr = nodes[ptr].parent;
             }
@@ -317,29 +246,24 @@ public class Levtree
             nodes[ref].processed = true;
             j = pathIndex - 1;
 
-            while (j-- > 0)
-            {
-                if (nodes[path[j]].processed)
-                {
+            while(j-- > 0) {
+                if(nodes[path[j]].processed) {
                     continue;
                 }
                 calculator.compute(wordkey, path, pathIndex, j);
                 nodes[path[j]].processed = true;
             }
-            if (size > 1)
-            {
+            if(size > 1) {
                 standing.newEntry(new LevtreeResult(nodes[ref].id, nodes[path[1]].row[size - 1], wordlist.get(nodes[ref].id)));
             }
         }
 
-        for (i = 0; i < entryCount; i++)
-        {
+        for(i = 0; i < entryCount; i++) {
             ref = entries[i];
             ptr = ref;
-            while (nodes[ptr].processed)
-            {
+            while(nodes[ptr].processed) {
                 nodes[ptr].processed = false;
-                if (ptr != 0)
+                if(ptr != 0)
                     ptr = nodes[ptr].parent;
                 else
                     break;
@@ -353,29 +277,11 @@ public class Levtree
      *
      * @param isCaseSensitive Set to true to toggle case-sensitive searches, false otherwise
      */
-    public void setCaseSensitive(boolean isCaseSensitive)
-    {
-        if (isCaseSensitive)
-        {
-            checker = new KeyChecker()
-            {
-                @Override
-                public boolean check(char key1, char key2)
-                {
-                    return key1 == key2;
-                }
-            };
-        }
-        else
-        {
-            checker = new KeyChecker()
-            {
-                @Override
-                public boolean check(char key1, char key2)
-                {
-                    return Character.toLowerCase(key1) == Character.toLowerCase(key2);
-                }
-            };
+    public void setCaseSensitive(boolean isCaseSensitive) {
+        if(isCaseSensitive) {
+            checker = (char key1, char key2) -> key1 == key2;
+        } else {
+            checker = (char key1, char key2) -> Character.toLowerCase(key1) == Character.toLowerCase(key2);
         }
     }
 
@@ -385,64 +291,40 @@ public class Levtree
      * @param algo An enum specifying the algorithm that will be used for string-distance calculation
      * @see com.jlevtree.Levtree.Algorithms
      */
-    public void setAlgorithm(Algorithms algo)
-    {
-        switch (algo)
-        {
-            case LEVENSHTEIN:
-            {
-                calculator = new DistanceCalculator()
-                {
-                    @Override
-                    void compute(String wordkey, int[] path, int pathLength, int j)
-                    {
-                        int[] prow = nodes[nodes[path[j]].parent].row;
-                        int[] crow = nodes[path[j]].row;
-                        crow[0] = prow[0] + 1;
-                        for (int k = 1; k < wordkey.length() + 1; k++)
-                        {
-                            if (checker.check(nodes[path[j]].key, wordkey.charAt(k - 1)))
-                            {
-                                crow[k] = prow[k - 1];
-                            }
-                            else
-                            {
-                                crow[k] = min3(crow[k - 1] + 1, prow[k] + 1, prow[k - 1] + 1);
-                            }
+    public void setAlgorithm(Algorithms algo) {
+        switch(algo) {
+            case LEVENSHTEIN: {
+                calculator = (String wordkey, int[] path, int pathLength, int j) -> {
+                    int[] prow = nodes[nodes[path[j]].parent].row;
+                    int[] crow = nodes[path[j]].row;
+                    crow[0] = prow[0] + 1;
+                    for(int k = 1; k < wordkey.length() + 1; k++) {
+                        if(checker.check(nodes[path[j]].key, wordkey.charAt(k - 1))) {
+                            crow[k] = prow[k - 1];
+                        } else {
+                            crow[k] = min3(crow[k - 1] + 1, prow[k] + 1, prow[k - 1] + 1);
                         }
                     }
                 };
             }
 
-            case DAMERAU_LEVENSHTEIN:
-            {
-                calculator = new DistanceCalculator()
-                {
-                    @Override
-                    void compute(String wordkey, int[] path, int pathLength, int j)
-                    {
-                        int[] prow = nodes[nodes[path[j]].parent].row;
-                        int[] crow = nodes[path[j]].row;
-                        int[] pprow = nodes[nodes[path[j + 1]].parent].row;
-                        crow[0] = prow[0] + 1;
-                        for (int k = 1; k < wordkey.length() + 1; k++)
-                        {
-                            if (checker.check(nodes[path[j]].key, wordkey.charAt(k - 1)))
-                            {
-                                crow[k] = prow[k - 1];
-                            }
-                            else
-                            {
-                                crow[k] = min3(crow[k - 1] + 1, prow[k] + 1, prow[k - 1] + 1);
-                            }
-                            if (j < pathLength - 2 && k > 1 &&
-                                    checker.check(nodes[path[j + 1]].key, wordkey.charAt(k - 1)) &&
-                                    checker.check(nodes[path[j]].key, wordkey.charAt(k - 2)) &&
-                                    !checker.check(wordkey.charAt(k - 2), wordkey.charAt(k - 1))
-                                    )
-                            {
-                                crow[k] = min(crow[k], pprow[k - 2] + 1);
-                            }
+            case DAMERAU_LEVENSHTEIN: {
+                calculator = (String wordkey, int[] path, int pathLength, int j) -> {
+                    int[] prow = nodes[nodes[path[j]].parent].row;
+                    int[] crow = nodes[path[j]].row;
+                    int[] pprow = nodes[nodes[path[j + 1]].parent].row;
+                    crow[0] = prow[0] + 1;
+                    for(int k = 1; k < wordkey.length() + 1; k++) {
+                        if(checker.check(nodes[path[j]].key, wordkey.charAt(k - 1))) {
+                            crow[k] = prow[k - 1];
+                        } else {
+                            crow[k] = min3(crow[k - 1] + 1, prow[k] + 1, prow[k - 1] + 1);
+                        }
+                        if(j < pathLength - 2 && k > 1 &&
+                            checker.check(nodes[path[j + 1]].key, wordkey.charAt(k - 1)) &&
+                            checker.check(nodes[path[j]].key, wordkey.charAt(k - 2)) &&
+                            !checker.check(wordkey.charAt(k - 2), wordkey.charAt(k - 1))) {
+                            crow[k] = min(crow[k], pprow[k - 2] + 1);
                         }
                     }
                 };

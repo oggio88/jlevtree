@@ -16,7 +16,7 @@ public abstract class AbstractTest {
     private void logInfo(Description description, String status, long nanos) {
         String testName = description.getMethodName();
         getLogger().info(String.format("Test %s %s, spent %d ms",
-                testName, status, TimeUnit.NANOSECONDS.toMillis(nanos)));
+            testName, status, TimeUnit.NANOSECONDS.toMillis(nanos)));
     }
 
     @Rule

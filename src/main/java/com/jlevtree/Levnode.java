@@ -1,7 +1,6 @@
 package com.jlevtree;
 
-class Levnode
-{
+class Levnode {
     char key;
     int id;
     int next;
@@ -11,8 +10,7 @@ class Levnode
     int[] row;
     boolean processed;
 
-    Levnode(char key, int index)
-    {
+    Levnode(char key, int index) {
         this.key = key;
         this.id = index;
         this.next = 0;
@@ -23,8 +21,7 @@ class Levnode
         this.processed = false;
     }
 
-    Levnode(Levnode src)
-    {
+    Levnode(Levnode src) {
         this.key = src.key;
         this.id = src.id;
         this.next = src.next;
@@ -35,8 +32,7 @@ class Levnode
         this.row = null;
     }
 
-    void init(char key, int index)
-    {
+    void init(char key, int index) {
         this.key = key;
         this.id = index;
         this.next = 0;
@@ -47,18 +43,15 @@ class Levnode
         this.processed = false;
     }
 
-    void alloc(int size)
-    {
+    void alloc(int size) {
         row = new int[size];
     }
 
-    boolean equals(Levnode node)
-    {
+    boolean equals(Levnode node) {
         return key == node.key;
     }
 
-    boolean keyCheck(char otherKey)
-    {
+    boolean keyCheck(char otherKey) {
         return key == otherKey;
     }
 }

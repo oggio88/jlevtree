@@ -1,11 +1,6 @@
 package com.jlevtree;
 
-/**
- * @author Walter Oggioni
- */
-
-public class LevtreeResult
-{
+public class LevtreeResult {
     /**
      * A number used as a unique identifier for the word into the tree structure
      */
@@ -21,10 +16,9 @@ public class LevtreeResult
      */
     public final String word;
 
-    LevtreeResult(int id, int distance, String word)
-    {
+    LevtreeResult(int id, int distance, String word) {
         this.id = id;
         this.distance = distance;
         this.word = word;
     }
-};
+}

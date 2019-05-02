@@ -17,16 +17,16 @@ public class Benchmark {
         tree.setAlgorithm(Levtree.Algorithms.DAMERAU_LEVENSHTEIN);
         tree.setCaseSensitive(false);
 
-        for (int ind = 0; ind < 50; ind++) {
-            for (String searchKey : searches) {
-                s = tree.search(searchKey, 6);
+        for(int ind = 0; ind < 50; ind++) {
+            for(String searchKey : searches) {
+                tree.search(searchKey, 6);
             }
         }
 
-        for (String searchKey : searches) {
+        for(String searchKey : searches) {
             s = tree.search(searchKey, 6);
 
-            for (LevtreeResult res : s) {
+            for(LevtreeResult res : s) {
                 System.out.printf("id: %d\tdistance: %d\t wordkey: %s\n", res.id, res.distance, res.word);
             }
             System.out.println();
